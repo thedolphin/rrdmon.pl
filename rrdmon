@@ -1,0 +1,13 @@
+#!/usr/bin/perl
+
+require "netif.pl";
+require "loadavg.pl";
+require "poller.pl";
+
+$p = new poller('/var/lib/rrdcached/db/all.rrd');
+
+$p->add(new loadavg());
+$p->add(new netif(qr/eth\d+/));
+
+$p->prepare();
+$p->daemon();
